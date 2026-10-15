@@ -58,12 +58,11 @@ public class Matrix {
 
         for (int y = 0; y < hight; y++) {
             for (int x = 0; x < other.wide; x++) {
-                // Накапливаем сумму: начинаем с нуля
                 Complex_num sum = new Complex_num(0, 0);
 
                 for (int k = 0; k < wide; k++) {
-                    Complex_num a = nums[this.wide * y + k];      // A[y][k]
-                    Complex_num b = other.nums[other.wide * k + x];    // B[k][x]
+                    Complex_num a = nums[this.wide * y + k];      
+                    Complex_num b = other.nums[other.wide * k + x];    
                     sum = sum.summ_nums(a.multiplication(b));
                 }
 
@@ -81,15 +80,11 @@ public class Matrix {
         return det(this.nums, this.hight);
     }
 
-    // Рекурсивная вспомогательная функция
     private Complex_num det(Complex_num[] m, int n) {
-        // База: 1x1
         if (n == 1) {
             return m[0];
         }
-        // База: 2x2
         if (n == 2) {
-            // m[0]*m[3] - m[1]*m[2]
             Complex_num ac = m[0].multiplication(m[3]);
             Complex_num bd = m[1].multiplication(m[2]);
             return ac.summ_nums(bd.multiplication(new Complex_num(-1, 0)));
@@ -98,7 +93,6 @@ public class Matrix {
         Complex_num result = new Complex_num(0, 0);
 
         for (int j = 0; j < n; j++) {
-            // Строим минор: без строки 0 и столбца j
             Complex_num[] minor = new Complex_num[(n - 1) * (n - 1)];
             int idx = 0;
             for (int row = 1; row < n; row++) {
@@ -110,7 +104,6 @@ public class Matrix {
 
             Complex_num term = m[j].multiplication(det(minor, n - 1));
 
-            // Знак: (-1)^j
             if (j % 2 == 1) {
                 term = term.multiplication(new Complex_num(-1, 0));
             }
@@ -128,7 +121,6 @@ public class Matrix {
         }
         int n = hight;
 
-        // Копируем A и единичную I рядом: [A | I], размер n x 2n
         Complex_num[] aug = new Complex_num[n * 2 * n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -139,7 +131,6 @@ public class Matrix {
             }
         }
 
-        // Прямой ход: приводим левую часть к единичной
         for (int col = 0; col < n; col++) {
             int pivot = -1;
             for (int row = col; row < n; row++) {
@@ -152,7 +143,6 @@ public class Matrix {
                 throw new ArithmeticException("Матрица вырождена, обратной не существует");
             }
 
-            // Меняем строки col и pivot
             if (pivot != col) {
                 for (int j = 0; j < 2 * n; j++) {
                     Complex_num tmp = aug[2 * n * col + j];
@@ -161,13 +151,11 @@ public class Matrix {
                 }
             }
 
-            // Нормируем строку col: делим на ведущий элемент
             Complex_num lead = aug[2 * n * col + col];
             for (int j = 0; j < 2 * n; j++) {
                 aug[2 * n * col + j] = aug[2 * n * col + j].division(lead);
             }
 
-            // Обнуляем столбец col во всех остальных строках
             for (int row = 0; row < n; row++) {
                 if (row == col) continue;
                 Complex_num factor = aug[2 * n * row + col];
@@ -181,7 +169,6 @@ public class Matrix {
             }
         }
 
-        // Правая половина — это обратная матрица
         Complex_num[] inv = new Complex_num[n * n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -191,7 +178,6 @@ public class Matrix {
         return new Matrix(inv, n, n);
     }
 
-    // Проверка на ноль комплексного числа
     private boolean isZero(Complex_num z) {
         return Math.abs(z.getRe()) < 1e-12 && Math.abs(z.getIm()) < 1e-12;
     }
@@ -206,17 +192,15 @@ public class Matrix {
 
 
     public Matrix transpose() {
-        Complex_num[] new_nums = new Complex_num[wide * hight];  // размер тот же, но hight и wide меняются местами
+        Complex_num[] new_nums = new Complex_num[wide * hight]; 
 
         for (int y = 0; y < hight; y++) {
             for (int x = 0; x < wide; x++) {
-                // элемент A[y][x] становится B[x][y]
-                // в новой матрице ширина = hight (старая высота)
                 new_nums[hight * x + y] = nums[wide * y + x];
             }
         }
 
-        return new Matrix(new_nums, wide, hight);  // высота и ширина меняются местами
+        return new Matrix(new_nums, wide, hight);  
     }
 
 
