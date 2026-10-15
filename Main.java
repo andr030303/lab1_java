@@ -16,13 +16,12 @@ public class Main {
                 System.out.print("Мнимая часть: ");
                 double imag = scanner.nextDouble();
 
-                matrix[i * wide + j] = new Complex_num(real, imag);   // ← исправлен индекс
+                matrix[i * wide + j] = new Complex_num(real, imag);
             }
         }
         return matrix;
     }
 
-    // Чтение размера матрицы с проверкой
     private static int readSize(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -37,12 +36,11 @@ public class Main {
         }
     }
 
-    // Создание матрицы с вводом размера
     private static Matrix createMatrix() {
         int wide = readSize("Ширина: ");
         int height = readSize("Высота: ");
         Complex_num[] data = fill_matrix(wide, height);
-        return new Matrix(data, height, wide);   // ← hight, wide — порядок как в конструкторе
+        return new Matrix(data, height, wide);
     }
 
     public static void main(String[] args) {
@@ -111,7 +109,6 @@ public class Main {
                         System.out.println("Что-то пошло не так!");
                         System.err.println("Отладка: " + e.getClass().getSimpleName()
                                            + ": " + e.getMessage());
-                        // Пропускаем остатки плохого ввода, чтобы не зациклиться
                         if (scanner.hasNextLine()) {
                             scanner.nextLine();
                         }
